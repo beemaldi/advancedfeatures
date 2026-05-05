@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36511.14 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aldiclassesadvancedfeatures", "aldiclassesadvancedfeatures\aldiclassesadvancedfeatures.csproj", "{7E75D728-FBF3-455D-85A1-79EA715119A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeBuild", "ZZCakeBuild\CakeBuild.csproj", "{FB49AC3C-1059-40DE-9EA5-E896FA1CE8E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7E75D728-FBF3-455D-85A1-79EA715119A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E75D728-FBF3-455D-85A1-79EA715119A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E75D728-FBF3-455D-85A1-79EA715119A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E75D728-FBF3-455D-85A1-79EA715119A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB49AC3C-1059-40DE-9EA5-E896FA1CE8E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB49AC3C-1059-40DE-9EA5-E896FA1CE8E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB49AC3C-1059-40DE-9EA5-E896FA1CE8E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB49AC3C-1059-40DE-9EA5-E896FA1CE8E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8E6C1EB-9325-470B-99F0-4E99425D1BBB}
+	EndGlobalSection
+EndGlobal
