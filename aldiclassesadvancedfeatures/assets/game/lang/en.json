@@ -1,9 +1,0 @@
-﻿{
-	"trait-smith": "<font color=\"#23FAF6\">• Smith </font>",
-	"traitname-smith": "Smith",
-	"traitdesc-smith": "Can craft and use <a href=\"handbooksearch://repair kit\">repair kits</a> to repair armor, a more efficient <a href=\"handbooksearch://brass torch holder\">torch holder</a> and the necessary <a href=\"handbooksearch://rucksack parts\">parts for a rucksack</a>.",
-
-	"trait-backpacker": "<font color=\"#23FAF6\">• Backpacker </font>",
-	"traitname-backpacker": "Backpacker",
-	"traitdesc-backpacker": "<i>Countless journeys have taught you how to reinforce and expand your <a href=\"handbooksearch://bigger\">backpacks</a>, turning simple packs into sturdier and more spacious gear. As well as this highly customizable <a href=\"handbooksearch://rucksack\">rucksack</a></i>."
-}

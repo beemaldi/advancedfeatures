@@ -1,9 +1,0 @@
-﻿{
-	"trait-smith": "<font color=\"#23FAF6\">• Schmied </font>",
-	"traitname-smith": "Schmied",
-	"traitdesc-smith": "Kann <a href=\"handbooksearch://reparatursatz\">Reparatursets</a> herstellen und verwenden, um Rüstungen zu reparieren, einen effizienteren <a href=\"handbooksearch://fackelhalter\">Fackelhalter</a> fertigen sowie die notwendigen <a href=\"handbooksearch://rucksackteile\">Teile für einen Rucksack</a> herstellen.",
-
-	"trait-backpacker": "<font color=\"#23FAF6\">• Backpacker </font>",
-	"traitname-backpacker": "Backpacker",
-	"traitdesc-backpacker": "<i>Zahlreiche Reisen haben dich gelehrt, deine <a href=\"handbooksearch://größere\">Rucksäcke</a> zu verstärken und zu erweitern, wodurch aus einfachen Taschen robustere und geräumigere Ausrüstung wird. Außerdem beherrschst du die Herstellung dieses vielseitig anpassbaren <a href=\"handbooksearch://rucksack\">Rucksacks</a>.</i>"
-}
