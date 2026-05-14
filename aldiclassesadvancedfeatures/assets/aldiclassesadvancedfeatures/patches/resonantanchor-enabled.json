@@ -1,0 +1,16 @@
+[
+  {
+    "file": "aldiclasses:recipes/grid/prospector-resonantanchor.json",
+    "op": "replace",
+    "path": "/0/enabled",
+    "value": true,
+    "side": "server"
+  },
+  {
+    "file": "aldiclasses:itemtypes/food/resonantanchor.json",
+    "op": "replace",
+    "path": "/enabled",
+    "value": true,
+    "side": "server"
+  }
+]

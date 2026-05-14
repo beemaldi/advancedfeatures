@@ -1,0 +1,35 @@
+{
+  "ingredient": {
+    "type": "item",
+    "code": "game:ingot-*",
+    "name": "metal",
+    "allowedvariants": [ "meteoriciron" ]
+  },
+  "pattern": [
+    [
+      "######",
+      "######",
+      "######",
+      "______",
+      "######",
+      "######",
+      "######"
+    ],
+    [
+      "######",
+      "#____#",
+      "######",
+      "______",
+      "######",
+      "#____#",
+      "######"
+    ]
+  ],
+  "name": "Lunchbox",
+  "code": "lunchbox-meteoriciron",
+  "output": {
+    "type": "item",
+    "code": "aldiclasses:lunchboxhalves",
+    "quantity": 2
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "file": "aldiclasses:recipes/grid/lunchbox.json",
+    "op": "replace",
+    "path": "/0/enabled",
+    "value": true,
+    "side": "server"
+  },
+  {
+    "file": "aldiclasses:itemtypes/lunchbox.json",
+    "op": "replace",
+    "path": "/enabled",
+    "value": true,
+    "side": "server"
+  },
+  {
+    "file": "aldiclasses:itemtypes/lunchboxhalves.json",
+    "op": "replace",
+    "path": "/enabled",
+    "value": true,
+    "side": "server"
+  }
+]
