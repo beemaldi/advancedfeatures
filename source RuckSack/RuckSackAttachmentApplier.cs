@@ -1,4 +1,3 @@
-
 using System;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
@@ -28,17 +27,20 @@ namespace RuckSack
             typesTree.SetString("arl", "1");
             if (!typesTree.HasAttribute("bedroll")) typesTree.SetString("bedroll", "none");
             if (!typesTree.HasAttribute("quartz")) typesTree.SetString("quartz", "none");
+            if (!typesTree.HasAttribute("lunchbox")) typesTree.SetString("lunchbox", "none");
             EnsureDefaultArlTextureTokens(typesTree);
 
             string bedrollState = typesTree.HasAttribute("bedroll") ? typesTree.GetString("bedroll") : "none";
             string quartzState = typesTree.HasAttribute("quartz") ? typesTree.GetString("quartz") : "none";
+            string lunchboxState = typesTree.HasAttribute("lunchbox") ? typesTree.GetString("lunchbox") : "none";
 
             bool bedrollAttached = bedrollState.Equals("attached", StringComparison.OrdinalIgnoreCase);
             bool quartzAttached = quartzState.Equals("attached", StringComparison.OrdinalIgnoreCase);
+            bool lunchboxAttached = lunchboxState.Equals("attached", StringComparison.OrdinalIgnoreCase);
 
             if (kind == (int)RuckSackAttachKind.Bedroll)
             {
-                
+
                 if (bedrollAttached) return false;
                 bool shouldConsume = true;
 
@@ -46,7 +48,7 @@ namespace RuckSack
 
                 if (!string.IsNullOrEmpty(variantToken))
                 {
-                    
+
                     string normalized = RuckSackTextureTokens.NormalizeTextureBaseToken(variantToken);
                     if (!string.IsNullOrEmpty(normalized))
                     {
@@ -59,7 +61,7 @@ namespace RuckSack
                 }
                 else
                 {
-                    
+
                     EnsureDefaultArlTextureTokens(typesTree);
                 }
                 if (bedrollAttached && quartzAttached)
@@ -77,7 +79,7 @@ namespace RuckSack
 
             if (kind == (int)RuckSackAttachKind.Quartz)
             {
-                
+
                 if (quartzAttached) return false;
                 bool shouldConsume = true;
 
@@ -85,7 +87,7 @@ namespace RuckSack
 
                 if (!string.IsNullOrEmpty(variantToken))
                 {
-                    
+
                     string normalized = RuckSackTextureTokens.NormalizeTextureBaseToken(variantToken);
                     if (!string.IsNullOrEmpty(normalized))
                     {
@@ -98,7 +100,7 @@ namespace RuckSack
                 }
                 else
                 {
-                    
+
                     EnsureDefaultArlTextureTokens(typesTree);
                 }
                 if (bedrollAttached && quartzAttached)
@@ -112,6 +114,14 @@ namespace RuckSack
                 }
 
                 return shouldConsume;
+            }
+
+            if (kind == (int)RuckSackAttachKind.Lunchbox)
+            {
+                if (lunchboxAttached) return false;
+
+                typesTree.SetString("lunchbox", "attached");
+                return true;
             }
 
             return false;
@@ -128,12 +138,13 @@ namespace RuckSack
             ITreeAttribute? typesTree = rucksackStack.Attributes.GetTreeAttribute("types");
             if (typesTree == null)
             {
-                
+
                 return false;
             }
 
             if (!typesTree.HasAttribute("bedroll")) typesTree.SetString("bedroll", "none");
             if (!typesTree.HasAttribute("quartz")) typesTree.SetString("quartz", "none");
+            if (!typesTree.HasAttribute("lunchbox")) typesTree.SetString("lunchbox", "none");
 
             string bedrollState = typesTree.GetString("bedroll", "none");
             string quartzState = typesTree.GetString("quartz", "none");
@@ -178,7 +189,7 @@ namespace RuckSack
             }
             catch
             {
-                
+
             }
         }
 

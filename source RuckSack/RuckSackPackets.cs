@@ -1,4 +1,3 @@
-
 using ProtoBuf;
 
 namespace RuckSack
@@ -6,7 +5,8 @@ namespace RuckSack
     public enum RuckSackAttachKind
     {
         Bedroll = 1,
-        Quartz = 2
+        Quartz = 2,
+        Lunchbox = 3
     }
 
     [ProtoContract]

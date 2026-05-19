@@ -1,4 +1,3 @@
-
 using System;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -13,20 +12,50 @@ namespace RuckSack
     {
         private const string ChannelName = "rucksack";
 
+        private static ICoreClientAPI? capi;
         private static ICoreServerAPI? sapi;
 
         private static IClientNetworkChannel? cchannel;
         private static IServerNetworkChannel? schannel;
 
-        internal static void InitClient(Vintagestory.API.Client.ICoreClientAPI api)
+        internal static void InitClient(ICoreClientAPI api)
         {
+            if (api == null) return;
+            if (cchannel != null && ReferenceEquals(capi, api)) return;
+
+            DisposeClient();
+
+            capi = api;
             RegisterClientNetwork(api);
         }
 
         internal static void InitServer(ICoreServerAPI api)
         {
+            if (api == null) return;
+            if (schannel != null && ReferenceEquals(sapi, api)) return;
+
+            DisposeServer();
+
             sapi = api;
             RegisterServerNetwork(api);
+        }
+
+        internal static void DisposeClient()
+        {
+            cchannel = null;
+            capi = null;
+        }
+
+        internal static void DisposeServer()
+        {
+            schannel = null;
+            sapi = null;
+        }
+
+        internal static void Dispose()
+        {
+            DisposeClient();
+            DisposeServer();
         }
 
         internal static void SendAttachRequest(int x, int y, int z, int kind, string? variantToken)
@@ -85,7 +114,7 @@ namespace RuckSack
             }
             catch
             {
-                
+
             }
         }
 
@@ -104,10 +133,8 @@ namespace RuckSack
             }, toPlayer);
         }
 
-        private static void RegisterClientNetwork(Vintagestory.API.Client.ICoreClientAPI api)
+        private static void RegisterClientNetwork(ICoreClientAPI api)
         {
-            if (cchannel != null) return;
-
             cchannel = api.Network
                 .RegisterChannel(ChannelName)
                 .RegisterMessageType<RuckSackAttachRequestPacket>()
@@ -118,8 +145,6 @@ namespace RuckSack
 
         private static void RegisterServerNetwork(ICoreServerAPI api)
         {
-            if (schannel != null) return;
-
             schannel = api.Network
                 .RegisterChannel(ChannelName)
                 .RegisterMessageType<RuckSackAttachRequestPacket>()
@@ -187,7 +212,7 @@ namespace RuckSack
             ItemStack? returnStack = TryRehydrateReturnStack(returnStackBase64);
             if (returnStack == null)
             {
-                
+
                 returnStack = TryCreateFallbackReturnStack(rucksackStack, packet.Kind);
             }
 
@@ -202,7 +227,7 @@ namespace RuckSack
                     }
                     catch
                     {
-                        
+
                     }
                 }
             }
@@ -240,7 +265,7 @@ namespace RuckSack
 
             if (kind == (int)RuckSackAttachKind.Quartz)
             {
-                
+
                 string qtzTex = typesTree?.GetString("quartztex", null);
                 string token = ExtractLastPathSegment(qtzTex);
                 if (!string.IsNullOrEmpty(token))
@@ -311,7 +336,7 @@ namespace RuckSack
             }
             catch
             {
-                
+
             }
 
             return false;
@@ -339,6 +364,11 @@ namespace RuckSack
             {
                 if (codePath.Equals("embraced-quartz", StringComparison.OrdinalIgnoreCase)) return true;
                 return codePath.StartsWith("embraced-quartz-", StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (kind == (int)RuckSackAttachKind.Lunchbox)
+            {
+                return codePath.Equals("lunchbox", StringComparison.OrdinalIgnoreCase);
             }
 
             return false;

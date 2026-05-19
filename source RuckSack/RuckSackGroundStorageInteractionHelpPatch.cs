@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using HarmonyLib;
@@ -17,8 +16,9 @@ namespace RuckSack
         private const string LangBedrollDetach = "aldiclasses:rucksackhelp-bedroll-detach";
         private const string LangQuartzAttach = "aldiclasses:rucksackhelp-quartz-attach";
         private const string LangQuartzDetach = "aldiclasses:rucksackhelp-quartz-detach";
+        private const string LangLunchboxAttach = "aldiclasses:rucksackhelp-lunchbox-attach";
 
-        private const string CacheKeyAttachHelpStacks = "aldiclasses:rucksack-attachhelp-stacks-v1";
+        private const string CacheKeyAttachHelpStacks = "aldiclasses:rucksack-attachhelp-stacks-v2";
         private static readonly string[] BedrollColors =
         {
             "black", "brown", "plain", "gray", "green", "blue", "pink", "purple", "red", "yellow", "white", "orange"
@@ -33,11 +33,13 @@ namespace RuckSack
         {
             public ItemStack[] BedrollStacks { get; }
             public ItemStack[] QuartzStacks { get; }
+            public ItemStack[] LunchboxStacks { get; }
 
-            public CachedAttachHelpStacks(ItemStack[] bedrollStacks, ItemStack[] quartzStacks)
+            public CachedAttachHelpStacks(ItemStack[] bedrollStacks, ItemStack[] quartzStacks, ItemStack[] lunchboxStacks)
             {
                 BedrollStacks = bedrollStacks ?? Array.Empty<ItemStack>();
                 QuartzStacks = quartzStacks ?? Array.Empty<ItemStack>();
+                LunchboxStacks = lunchboxStacks ?? Array.Empty<ItemStack>();
             }
         }
 
@@ -57,6 +59,7 @@ namespace RuckSack
             }
             bool bedrollAttached = IsAttachmentAttached(rucksackStack, "bedroll");
             bool quartzAttached = IsAttachmentAttached(rucksackStack, "quartz");
+            bool lunchboxAttached = IsAttachmentAttached(rucksackStack, "lunchbox");
             CachedAttachHelpStacks? cachedStacks = null;
             try
             {
@@ -85,6 +88,16 @@ namespace RuckSack
                 HotKeyCode = "shift",
                 Itemstacks = quartzAttached ? null : (cachedStacks?.QuartzStacks ?? null)
             });
+            if (!lunchboxAttached)
+            {
+                extra.Add(new WorldInteraction
+                {
+                    ActionLangCode = LangLunchboxAttach,
+                    MouseButton = EnumMouseButton.Right,
+                    HotKeyCode = "shift",
+                    Itemstacks = cachedStacks?.LunchboxStacks ?? null
+                });
+            }
 
             __result ??= Array.Empty<WorldInteraction>();
             __result = extra.ToArray().Append(__result);
@@ -94,7 +107,7 @@ namespace RuckSack
         {
             if (world == null)
             {
-                return new CachedAttachHelpStacks(Array.Empty<ItemStack>(), Array.Empty<ItemStack>());
+                return new CachedAttachHelpStacks(Array.Empty<ItemStack>(), Array.Empty<ItemStack>(), Array.Empty<ItemStack>());
             }
 
             List<ItemStack> bedrollStacks = new List<ItemStack>(BedrollColors.Length);
@@ -125,9 +138,17 @@ namespace RuckSack
                 }
             }
 
+            List<ItemStack> lunchboxStacks = new List<ItemStack>(1);
+            Item lunchbox = world.GetItem(new AssetLocation("aldiclasses", "lunchbox"));
+            if (lunchbox != null)
+            {
+                lunchboxStacks.Add(new ItemStack(lunchbox));
+            }
+
             return new CachedAttachHelpStacks(
                 bedrollStacks.Count > 0 ? bedrollStacks.ToArray() : Array.Empty<ItemStack>(),
-                quartzStacks.Count > 0 ? quartzStacks.ToArray() : Array.Empty<ItemStack>()
+                quartzStacks.Count > 0 ? quartzStacks.ToArray() : Array.Empty<ItemStack>(),
+                lunchboxStacks.Count > 0 ? lunchboxStacks.ToArray() : Array.Empty<ItemStack>()
             );
         }
 

@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using AttributeRenderingLibrary;
 using HarmonyLib;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 
 namespace RuckSack
@@ -11,7 +15,12 @@ namespace RuckSack
     {
         internal static bool IsTargetRucksack(ItemStack? stack)
         {
-            AssetLocation? code = stack?.Collectible?.Code;
+            return IsTargetRucksack(stack?.Collectible);
+        }
+
+        internal static bool IsTargetRucksack(CollectibleObject? collectible)
+        {
+            AssetLocation? code = collectible?.Code;
             if (code == null) return false;
             if (!string.Equals(code.Domain, "aldiclasses", StringComparison.OrdinalIgnoreCase)) return false;
 
@@ -20,9 +29,56 @@ namespace RuckSack
                     code.Path.StartsWith("rucksack-", StringComparison.OrdinalIgnoreCase));
         }
 
+        internal static bool HasDynamicAttachmentShapes(CollectibleObject collectible)
+        {
+            JsonObject? attachable = collectible.Attributes?["STFA_attachableToEntity"];
+            if (attachable == null || !attachable.Exists) return false;
+
+            JsonObject? attachedShape = attachable["attachedShape"];
+            JsonObject? attachedShapeBySlotCode = attachable["attachedShapeBySlotCode"];
+
+            return attachedShape != null && attachedShape.Exists ||
+                   attachedShapeBySlotCode != null && attachedShapeBySlotCode.Exists;
+        }
+
         internal static string BuildNormalKey(ItemStack itemstack)
         {
             return $"{itemstack.Collectible.Code}-{Variants.FromStack(itemstack)}";
+        }
+    }
+
+    [HarmonyPatch(typeof(ItemShapeTexturesFromAttributes))]
+    internal static class ArlItemShapeTexturesFromAttributesOnLoadedPatch
+    {
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(ItemShapeTexturesFromAttributes.OnLoaded))]
+        private static IEnumerable<CodeInstruction> OnLoadedTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo warn = AccessTools.Method(typeof(LoggerUtil), nameof(LoggerUtil.Warn), new[] { typeof(ICoreAPI), typeof(object), typeof(string) });
+            MethodInfo replacement = AccessTools.Method(typeof(ArlItemShapeTexturesFromAttributesOnLoadedPatch), nameof(WarnUnsupportedWearable));
+
+            foreach (CodeInstruction instruction in instructions)
+            {
+                if (instruction.Calls(warn))
+                {
+                    yield return new CodeInstruction(OpCodes.Call, replacement);
+                    continue;
+                }
+
+                yield return instruction;
+            }
+        }
+
+        private static void WarnUnsupportedWearable(ICoreAPI api, object caller, string format)
+        {
+            if (caller is ItemShapeTexturesFromAttributes item &&
+                ArlWearableAttachmentBypassPatch.IsTargetRucksack(item) &&
+                ArlWearableAttachmentBypassPatch.HasDynamicAttachmentShapes(item))
+            {
+                return;
+            }
+
+            LoggerUtil.Warn(api, caller, format);
         }
     }
 

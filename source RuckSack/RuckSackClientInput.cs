@@ -1,4 +1,3 @@
-
 using System;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -15,11 +14,38 @@ namespace RuckSack
 
         internal static void Init(ICoreClientAPI api)
         {
-            capi = api;
+            if (api == null) return;
+            if (clientHooked && ReferenceEquals(capi, api)) return;
 
-            if (clientHooked) return;
-            clientHooked = true;
+            Dispose();
+
+            capi = api;
             capi.Event.MouseDown += OnMouseDown;
+            capi.Event.LeftWorld += OnLeftWorld;
+            clientHooked = true;
+        }
+
+        internal static void Dispose()
+        {
+            if (capi != null && clientHooked)
+            {
+                try
+                {
+                    capi.Event.MouseDown -= OnMouseDown;
+                    capi.Event.LeftWorld -= OnLeftWorld;
+                }
+                catch
+                {
+                }
+            }
+
+            capi = null;
+            clientHooked = false;
+        }
+
+        private static void OnLeftWorld()
+        {
+            Input.DisposeClient();
         }
 
         private static void OnMouseDown(MouseEvent e)
@@ -68,11 +94,21 @@ namespace RuckSack
                 return;
             }
             string usedItemPath = activeSlot.Itemstack.Collectible.Code.Path;
-            if (!RuckSackVariantResolver.IsBedrollOrEmbracedQuartz(usedItemPath)) return;
+            bool isLunchbox = usedItemPath.Equals("lunchbox", StringComparison.OrdinalIgnoreCase);
+            if (!isLunchbox && !RuckSackVariantResolver.IsBedrollOrEmbracedQuartz(usedItemPath)) return;
 
-            int kind = usedItemPath.StartsWith("bedroll", StringComparison.OrdinalIgnoreCase)
-                ? (int)RuckSackAttachKind.Bedroll
-                : (int)RuckSackAttachKind.Quartz;
+            int kind;
+            if (isLunchbox)
+            {
+                kind = (int)RuckSackAttachKind.Lunchbox;
+            }
+            else
+            {
+                kind = usedItemPath.StartsWith("bedroll", StringComparison.OrdinalIgnoreCase)
+                    ? (int)RuckSackAttachKind.Bedroll
+                    : (int)RuckSackAttachKind.Quartz;
+            }
+
             bool isTop = blockSel.Face == BlockFacing.UP;
             bool isSide =
                 blockSel.Face == BlockFacing.NORTH ||
@@ -88,14 +124,19 @@ namespace RuckSack
                 return;
             }
             e.Handled = true;
-            string? variantToken = kind == (int)RuckSackAttachKind.Bedroll
-                ? RuckSackVariantResolver.TryExtractBedrollTextureBase(activeSlot.Itemstack)
-                : RuckSackVariantResolver.TryExtractQuartzTextureBase(activeSlot.Itemstack);
-            if (string.IsNullOrEmpty(variantToken))
+
+            string? variantToken = null;
+            if (kind == (int)RuckSackAttachKind.Bedroll || kind == (int)RuckSackAttachKind.Quartz)
             {
                 variantToken = kind == (int)RuckSackAttachKind.Bedroll
-                    ? RuckSackTextureTokens.BedrollTextureDefaultToken
-                    : RuckSackTextureTokens.QuartzTextureDefaultToken;
+                    ? RuckSackVariantResolver.TryExtractBedrollTextureBase(activeSlot.Itemstack)
+                    : RuckSackVariantResolver.TryExtractQuartzTextureBase(activeSlot.Itemstack);
+                if (string.IsNullOrEmpty(variantToken))
+                {
+                    variantToken = kind == (int)RuckSackAttachKind.Bedroll
+                        ? RuckSackTextureTokens.BedrollTextureDefaultToken
+                        : RuckSackTextureTokens.QuartzTextureDefaultToken;
+                }
             }
 
             RuckSackNetworking.SendAttachRequest(
@@ -122,6 +163,11 @@ namespace RuckSack
             if (kind == (int)RuckSackAttachKind.Quartz)
             {
                 return typesTree.GetString("quartz", "none").Equals("attached", StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (kind == (int)RuckSackAttachKind.Lunchbox)
+            {
+                return typesTree.GetString("lunchbox", "none").Equals("attached", StringComparison.OrdinalIgnoreCase);
             }
 
             return false;

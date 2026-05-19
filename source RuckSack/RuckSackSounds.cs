@@ -1,4 +1,3 @@
-
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
 
@@ -6,9 +5,10 @@ namespace RuckSack
 {
     internal static class RuckSackSounds
     {
-        
+
         private static readonly AssetLocation QuartzSound = new AssetLocation("game:sounds/block/glass");
         private static readonly AssetLocation BedrollSound = new AssetLocation("game:sounds/player/build");
+        private static readonly AssetLocation LunchboxSound = new AssetLocation("game:sounds/player/build");
 
         internal static void PlayAttach(IWorldAccessor world, BlockPos pos, int kind)
         {
@@ -34,6 +34,7 @@ namespace RuckSack
         {
             if (kind == (int)RuckSackAttachKind.Quartz) return QuartzSound;
             if (kind == (int)RuckSackAttachKind.Bedroll) return BedrollSound;
+            if (kind == (int)RuckSackAttachKind.Lunchbox) return LunchboxSound;
             return null;
         }
     }
