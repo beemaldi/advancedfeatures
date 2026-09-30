@@ -32,6 +32,11 @@ namespace RuckSack
                 "ResonantAnchorStability",
                 typeof(CollectibleBehaviorResonantAnchorStability)
             );
+
+            api.RegisterCollectibleBehaviorClass(
+                "QuickIgnite",
+                typeof(CollectibleBehaviorQuickIgnite)
+            );
         }
 
         public override void StartClientSide(ICoreClientAPI api)
