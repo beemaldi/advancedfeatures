@@ -16,9 +16,10 @@ namespace RuckSack
         private const float IgniteBoostSeconds = 10f;
         private const double ReachPadding = 1.5;
         private const int FlashStepsPerBlock = 6;
-        private const double HandForwardOffset = 0.5;
-        private const double HandSideOffset = 0.35;
-        private const double HandDropOffset = 0.6;
+        private const double HandForwardOffset = 0.75;
+        private const double HandSideOffset = 0.5;
+        private const double HandDropOffset = 0.65;
+        private const double TargetHeight = 0.25;
         private const float CastSoundPitch = 1.4f;
         private const float CastSoundVolume = 0.6f;
 
@@ -162,7 +163,7 @@ namespace RuckSack
                 forward.X * HandForwardOffset + left.X * HandSideOffset,
                 -HandDropOffset,
                 forward.Z * HandForwardOffset + left.Z * HandSideOffset);
-            Vec3d delta = new Vec3d(pos.X + 0.5, pos.Y + 0.5, pos.Z + 0.5).Sub(start);
+            Vec3d delta = new Vec3d(pos.X + 0.5, pos.Y + TargetHeight, pos.Z + 0.5).Sub(start);
 
             int steps = Math.Max(2, (int)(delta.Length() * FlashStepsPerBlock));
             for (int i = 0; i <= steps; i++)
