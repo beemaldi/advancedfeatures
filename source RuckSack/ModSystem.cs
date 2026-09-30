@@ -37,6 +37,11 @@ namespace RuckSack
                 "QuickIgnite",
                 typeof(CollectibleBehaviorQuickIgnite)
             );
+
+            api.RegisterCollectibleBehaviorClass(
+                "IgnitionBangle",
+                typeof(CollectibleBehaviorIgnitionBangle)
+            );
         }
 
         public override void StartClientSide(ICoreClientAPI api)

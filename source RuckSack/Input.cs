@@ -9,6 +9,7 @@ namespace RuckSack
         {
             RuckSackNetworking.InitClient(api);
             RuckSackClientInput.Init(api);
+            IgnitionBangleClientInput.Init(api);
         }
 
         public static void InitServer(ICoreServerAPI api)
@@ -19,12 +20,14 @@ namespace RuckSack
         public static void DisposeClient()
         {
             RuckSackClientInput.Dispose();
+            IgnitionBangleClientInput.Dispose();
             RuckSackNetworking.DisposeClient();
         }
 
         public static void DisposeServer()
         {
             RuckSackNetworking.DisposeServer();
+            IgnitionBangleCaster.Reset();
         }
 
         public static void Dispose()

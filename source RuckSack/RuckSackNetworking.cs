@@ -85,6 +85,18 @@ namespace RuckSack
             });
         }
 
+        internal static void SendIgniteRequest(int x, int y, int z)
+        {
+            if (cchannel == null) return;
+
+            cchannel.SendPacket(new RuckSackIgniteRequestPacket
+            {
+                X = x,
+                Y = y,
+                Z = z
+            });
+        }
+
         internal static void BroadcastQuartzLightState(long entityId, bool active, int h, int s, int v)
         {
             if (schannel == null) return;
@@ -140,6 +152,7 @@ namespace RuckSack
                 .RegisterMessageType<RuckSackAttachRequestPacket>()
                 .RegisterMessageType<RuckSackDetachRequestPacket>()
                 .RegisterMessageType<RuckSackQuartzLightStatePacket>()
+                .RegisterMessageType<RuckSackIgniteRequestPacket>()
                 .SetMessageHandler<RuckSackQuartzLightStatePacket>(RuckSackQuartzLightSystem.OnQuartzLightStatePacket);
         }
 
@@ -150,8 +163,19 @@ namespace RuckSack
                 .RegisterMessageType<RuckSackAttachRequestPacket>()
                 .RegisterMessageType<RuckSackDetachRequestPacket>()
                 .RegisterMessageType<RuckSackQuartzLightStatePacket>()
+                .RegisterMessageType<RuckSackIgniteRequestPacket>()
                 .SetMessageHandler<RuckSackAttachRequestPacket>(OnAttachRequest)
-                .SetMessageHandler<RuckSackDetachRequestPacket>(OnDetachRequest);
+                .SetMessageHandler<RuckSackDetachRequestPacket>(OnDetachRequest)
+                .SetMessageHandler<RuckSackIgniteRequestPacket>(OnIgniteRequest);
+        }
+
+        private static void OnIgniteRequest(IServerPlayer fromPlayer, RuckSackIgniteRequestPacket packet)
+        {
+            if (packet == null) return;
+            if (fromPlayer == null) return;
+            if (sapi == null) return;
+
+            IgnitionBangleCaster.TryCast(sapi, fromPlayer, new BlockPos(packet.X, packet.Y, packet.Z));
         }
 
         private static void OnAttachRequest(IServerPlayer fromPlayer, RuckSackAttachRequestPacket packet)

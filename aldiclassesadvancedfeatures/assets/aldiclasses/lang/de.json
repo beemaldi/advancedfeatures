@@ -1,3 +1,7 @@
 ﻿{
-	"rucksackhelp-lunchbox-attach": "Brotzeitbox in den Rucksack stecken"
+	"rucksackhelp-lunchbox-attach": "Brotzeitbox in den Rucksack stecken",
+	"ignitionbangle-charges": "Ladungen: {0} / {1}",
+	"ignitionbangle-refill": "Temporales Zahnrad hinzufügen, um es aufzuladen",
+	"ingameerror-ignitionbangle-full": "Das Armband ist noch ausreichend geladen",
+	"ingameerror-ignitionbangle-empty": "Das Armband hat keine Ladung mehr"
 }

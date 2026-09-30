@@ -59,4 +59,17 @@ namespace RuckSack
         [ProtoMember(5)]
         public int V;
     }
+
+    [ProtoContract]
+    public sealed class RuckSackIgniteRequestPacket
+    {
+        [ProtoMember(1)]
+        public int X;
+
+        [ProtoMember(2)]
+        public int Y;
+
+        [ProtoMember(3)]
+        public int Z;
+    }
 }
