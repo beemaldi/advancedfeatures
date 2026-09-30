@@ -7,7 +7,7 @@
       "saltywater"
     ],
     "description": "Don't forget to install Attribute rendering library!",
-    "version": "2.1.1",
+    "version": "2.2.0",
   "dependencies": {
     "aldiclasses": "*",
     "attributerenderinglibrary": "*"
