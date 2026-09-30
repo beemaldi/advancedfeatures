@@ -15,6 +15,7 @@ namespace RuckSack
         private const int DefaultMaxCharges = 250;
         private const string DefaultAnimation = "holdinglanternlefthand";
         private const string DefaultRefillItem = "game:gear-temporal";
+        private const string DefaultCastSound = "game:sounds/player/strike";
 
         private ICoreAPI? api;
         private AssetLocation refillItem = new AssetLocation(DefaultRefillItem);
@@ -22,6 +23,7 @@ namespace RuckSack
 
         internal int MaxCharges { get; private set; } = DefaultMaxCharges;
         internal string Animation { get; private set; } = DefaultAnimation;
+        internal AssetLocation? CastSound { get; private set; } = new AssetLocation(DefaultCastSound);
 
         public CollectibleBehaviorIgnitionBangle(CollectibleObject collObj) : base(collObj)
         {
@@ -34,6 +36,9 @@ namespace RuckSack
             MaxCharges = properties["maxCharges"].AsInt(DefaultMaxCharges);
             Animation = properties["animation"].AsString(DefaultAnimation);
             refillItem = new AssetLocation(properties["refillItem"].AsString(DefaultRefillItem));
+
+            string? castSound = properties["castSound"].AsString(DefaultCastSound);
+            CastSound = string.IsNullOrEmpty(castSound) ? null : new AssetLocation(castSound);
 
             string?[] codes = properties["ignitableBlocks"].AsArray(Array.Empty<string>());
             List<AssetLocation> locations = new List<AssetLocation>(codes.Length);

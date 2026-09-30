@@ -15,6 +15,11 @@ namespace RuckSack
         private const float IgniteBoostSeconds = 10f;
         private const double ReachPadding = 1.5;
         private const int FlashStepsPerBlock = 6;
+        private const double HandForwardOffset = 0.5;
+        private const double HandSideOffset = 0.35;
+        private const double HandDropOffset = 0.6;
+        private const float CastSoundPitch = 1.4f;
+        private const float CastSoundVolume = 0.6f;
 
         private static readonly AssetLocation IgniteSound = new AssetLocation("sounds/torch-ignite");
         private static readonly HashSet<string> pendingCasts = new HashSet<string>();
@@ -87,6 +92,10 @@ namespace RuckSack
             pendingCasts.Add(player.PlayerUID);
             player.Entity.AnimManager?.StartAnimation(animation);
             SpawnFlash(sapi.World, player.Entity, pos);
+            if (bangle.CastSound != null)
+            {
+                sapi.World.PlaySoundAt(bangle.CastSound, player.Entity, null, CastSoundPitch, 16, CastSoundVolume);
+            }
 
             sapi.Event.RegisterCallback(_ => FinishCast(sapi, player, pos, animation), CastDelayMs);
         }
@@ -146,10 +155,12 @@ namespace RuckSack
         {
             double yaw = entity.Pos.Yaw;
             Vec3d forward = new Vec3d(-Math.Sin(yaw), 0, -Math.Cos(yaw));
-            Vec3d left = new Vec3d(forward.Z, 0, -forward.X);
+            Vec3d left = new Vec3d(-forward.Z, 0, forward.X);
 
-            Vec3d start = entity.Pos.XYZ.Add(entity.LocalEyePos)
-                .Add(forward.X * 0.5 + left.X * 0.35, -0.35, forward.Z * 0.5 + left.Z * 0.35);
+            Vec3d start = entity.Pos.XYZ.Add(entity.LocalEyePos).Add(
+                forward.X * HandForwardOffset + left.X * HandSideOffset,
+                -HandDropOffset,
+                forward.Z * HandForwardOffset + left.Z * HandSideOffset);
             Vec3d delta = new Vec3d(pos.X + 0.5, pos.Y + 0.5, pos.Z + 0.5).Sub(start);
 
             int steps = Math.Max(2, (int)(delta.Length() * FlashStepsPerBlock));
