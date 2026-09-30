@@ -16,8 +16,8 @@ namespace RuckSack
         private const float IgniteBoostSeconds = 10f;
         private const double ReachPadding = 1.5;
         private const int FlashStepsPerBlock = 6;
-        private const double HandForwardOffset = 1.15;
-        private const double HandSideOffset = 0.7;
+        private const double HandForwardOffset = 0.5;
+        private const double HandSideOffset = 0.4;
         private const double HandDropOffset = 0.65;
         private const double TargetHeight = 0.25;
         private const float CastSoundPitch = 1.4f;
@@ -155,15 +155,20 @@ namespace RuckSack
 
         private static void SpawnFlash(IWorldAccessor world, EntityPlayer entity, BlockPos pos)
         {
-            double yaw = entity.Pos.Yaw;
-            Vec3d forward = new Vec3d(-Math.Sin(yaw), 0, -Math.Cos(yaw));
-            Vec3d left = new Vec3d(-forward.Z, 0, forward.X);
+            Vec3d eye = entity.Pos.XYZ.Add(entity.LocalEyePos);
+            Vec3d target = new Vec3d(pos.X + 0.5, pos.Y + TargetHeight, pos.Z + 0.5);
 
-            Vec3d start = entity.Pos.XYZ.Add(entity.LocalEyePos).Add(
+            Vec3d forward = new Vec3d(target.X - eye.X, 0, target.Z - eye.Z);
+            double horizontalDistance = forward.Length();
+            if (horizontalDistance > 0.01) forward.Mul(1 / horizontalDistance);
+
+            Vec3d left = new Vec3d(forward.Z, 0, -forward.X);
+
+            Vec3d start = eye.AddCopy(
                 forward.X * HandForwardOffset + left.X * HandSideOffset,
                 -HandDropOffset,
                 forward.Z * HandForwardOffset + left.Z * HandSideOffset);
-            Vec3d delta = new Vec3d(pos.X + 0.5, pos.Y + TargetHeight, pos.Z + 0.5).Sub(start);
+            Vec3d delta = target.SubCopy(start);
 
             int steps = Math.Max(2, (int)(delta.Length() * FlashStepsPerBlock));
             for (int i = 0; i <= steps; i++)
