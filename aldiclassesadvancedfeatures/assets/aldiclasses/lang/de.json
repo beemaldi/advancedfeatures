@@ -3,5 +3,6 @@
 	"ignitionbangle-charges": "Ladungen: {0} / {1}",
 	"ignitionbangle-refill": "Temporales Zahnrad hinzufügen, um es aufzuladen",
 	"ingameerror-ignitionbangle-full": "Das Armband ist noch ausreichend geladen",
-	"ingameerror-ignitionbangle-empty": "Das Armband hat keine Ladung mehr"
+	"ingameerror-ignitionbangle-empty": "Das Armband hat keine Ladung mehr",
+	"blockhelp-ignitionbangle-ignite": "Mit Armband anzünden"
 }

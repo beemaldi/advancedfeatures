@@ -3,5 +3,6 @@
 	"ignitionbangle-charges": "Charges: {0} / {1}",
 	"ignitionbangle-refill": "Add a temporal gear to recharge",
 	"ingameerror-ignitionbangle-full": "The bangle is still charged enough",
-	"ingameerror-ignitionbangle-empty": "The bangle has no charges left"
+	"ingameerror-ignitionbangle-empty": "The bangle has no charges left",
+	"blockhelp-ignitionbangle-ignite": "Ignite with bangle"
 }
