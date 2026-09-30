@@ -16,7 +16,7 @@ namespace RuckSack
         private const float IgniteBoostSeconds = 10f;
         private const double ReachPadding = 1.5;
         private const int FlashStepsPerBlock = 6;
-        private const double HandForwardOffset = 0.75;
+        private const double HandForwardOffset = 1.15;
         private const double HandSideOffset = 0.7;
         private const double HandDropOffset = 0.65;
         private const double TargetHeight = 0.25;
