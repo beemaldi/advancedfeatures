@@ -6,7 +6,7 @@ namespace RuckSack
 {
     internal static class IgnitionBangleClientInput
     {
-        private const long CastCooldownMs = IgnitionBangleCaster.CastDelayMs + 250;
+        private const long CastCooldownMs = IgnitionBangleCaster.AnimationDurationMs;
 
         private static ICoreClientAPI? capi;
         private static bool clientHooked;
@@ -57,7 +57,7 @@ namespace RuckSack
             BlockSelection blockSel = player.CurrentBlockSelection;
             if (blockSel?.Position == null) return;
             if (!IgnitionBangleCaster.TryGetWornBangle(player, out ItemSlot? bangleSlot, out CollectibleBehaviorIgnitionBangle? bangle)) return;
-            if (IgnitionBangleCaster.GetIgnitableTarget(api.World, player.Entity, blockSel.Position, bangle) == null) return;
+            if (IgnitionBangleCaster.GetIgnitableTarget(api.World, player.Entity, blockSel.Position) == null) return;
 
             e.Handled = true;
 
@@ -73,7 +73,7 @@ namespace RuckSack
 
             string animation = bangle.Animation;
             player.Entity.AnimManager?.StartAnimation(animation);
-            api.Event.RegisterCallback(_ => api.World?.Player?.Entity?.AnimManager?.StopAnimation(animation), IgnitionBangleCaster.CastDelayMs);
+            api.Event.RegisterCallback(_ => api.World?.Player?.Entity?.AnimManager?.StopAnimation(animation), IgnitionBangleCaster.AnimationDurationMs);
 
             RuckSackNetworking.SendIgniteRequest(blockSel.Position.X, blockSel.Position.Y, blockSel.Position.Z);
         }

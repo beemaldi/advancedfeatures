@@ -11,7 +11,8 @@ namespace RuckSack
 {
     internal static class IgnitionBangleCaster
     {
-        internal const int CastDelayMs = 1000;
+        internal const int IgniteDelayMs = 200;
+        internal const int AnimationDurationMs = 700;
         private const float IgniteBoostSeconds = 10f;
         private const double ReachPadding = 1.5;
         private const int FlashStepsPerBlock = 6;
@@ -68,12 +69,9 @@ namespace RuckSack
             return false;
         }
 
-        internal static IIgnitable? GetIgnitableTarget(IWorldAccessor world, EntityAgent byEntity, BlockPos pos, CollectibleBehaviorIgnitionBangle bangle)
+        internal static IIgnitable? GetIgnitableTarget(IWorldAccessor world, EntityAgent byEntity, BlockPos pos)
         {
-            Block block = world.BlockAccessor.GetBlock(pos);
-            if (!bangle.CanIgnite(block)) return null;
-
-            IIgnitable? ignitable = block.GetInterface<IIgnitable>(world, pos);
+            IIgnitable? ignitable = world.BlockAccessor.GetBlock(pos).GetInterface<IIgnitable>(world, pos);
             if (ignitable == null) return null;
 
             EnumIgniteState state = ignitable.OnTryIgniteBlock(byEntity, pos, 0);
@@ -97,13 +95,13 @@ namespace RuckSack
                 sapi.World.PlaySoundAt(bangle.CastSound, player.Entity, null, CastSoundPitch, 16, CastSoundVolume);
             }
 
-            sapi.Event.RegisterCallback(_ => FinishCast(sapi, player, pos, animation), CastDelayMs);
+            sapi.Event.RegisterCallback(_ => FinishCast(sapi, player, pos), IgniteDelayMs);
+            sapi.Event.RegisterCallback(_ => player.Entity?.AnimManager?.StopAnimation(animation), AnimationDurationMs);
         }
 
-        private static void FinishCast(ICoreServerAPI sapi, IServerPlayer player, BlockPos pos, string animation)
+        private static void FinishCast(ICoreServerAPI sapi, IServerPlayer player, BlockPos pos)
         {
             pendingCasts.Remove(player.PlayerUID);
-            player.Entity?.AnimManager?.StopAnimation(animation);
 
             if (!TryGetValidCast(sapi.World, player, pos, out ItemSlot? bangleSlot, out _, out IIgnitable? ignitable)) return;
             if (ignitable.OnTryIgniteBlock(player.Entity, pos, IgniteBoostSeconds) != EnumIgniteState.IgniteNow) return;
@@ -139,7 +137,7 @@ namespace RuckSack
             if (!IsInReach(player, entity, pos)) return false;
             if (!world.Claims.TryAccess(player, pos, EnumBlockAccessFlags.Use)) return false;
 
-            ignitable = GetIgnitableTarget(world, entity, pos, bangle);
+            ignitable = GetIgnitableTarget(world, entity, pos);
             return ignitable != null;
         }
 

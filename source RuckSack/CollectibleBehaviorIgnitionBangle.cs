@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
-using Vintagestory.API.Util;
 
 namespace RuckSack
 {
@@ -19,7 +17,6 @@ namespace RuckSack
 
         private ICoreAPI? api;
         private AssetLocation refillItem = new AssetLocation(DefaultRefillItem);
-        private AssetLocation[] ignitableBlocks = Array.Empty<AssetLocation>();
 
         internal int MaxCharges { get; private set; } = DefaultMaxCharges;
         internal string Animation { get; private set; } = DefaultAnimation;
@@ -39,18 +36,6 @@ namespace RuckSack
 
             string? castSound = properties["castSound"].AsString(DefaultCastSound);
             CastSound = string.IsNullOrEmpty(castSound) ? null : new AssetLocation(castSound);
-
-            string?[] codes = properties["ignitableBlocks"].AsArray(Array.Empty<string>());
-            List<AssetLocation> locations = new List<AssetLocation>(codes.Length);
-            for (int i = 0; i < codes.Length; i++)
-            {
-                string? code = codes[i];
-                if (string.IsNullOrEmpty(code)) continue;
-
-                locations.Add(new AssetLocation(code));
-            }
-
-            ignitableBlocks = locations.ToArray();
         }
 
         public override void OnLoaded(ICoreAPI api)
@@ -67,18 +52,6 @@ namespace RuckSack
         internal static void SetCharges(ItemStack stack, int charges)
         {
             stack.Attributes.SetInt(ChargesKey, Math.Max(0, charges));
-        }
-
-        internal bool CanIgnite(Block block)
-        {
-            if (block?.Code == null) return false;
-
-            for (int i = 0; i < ignitableBlocks.Length; i++)
-            {
-                if (WildcardUtil.Match(ignitableBlocks[i], block.Code)) return true;
-            }
-
-            return false;
         }
 
         public override int GetMergableQuantity(ItemStack sinkStack, ItemStack sourceStack, EnumMergePriority priority, ref EnumHandling handling)
