@@ -57,7 +57,7 @@ namespace RuckSack
             BlockSelection blockSel = player.CurrentBlockSelection;
             if (blockSel?.Position == null) return;
             if (!IgnitionBangleCaster.TryGetWornBangle(player, out ItemSlot? bangleSlot, out CollectibleBehaviorIgnitionBangle? bangle)) return;
-            if (IgnitionBangleCaster.GetIgnitableTarget(api.World, player.Entity, blockSel.Position) == null) return;
+            if (IgnitionBangleCaster.GetIgnitableTarget(api.World, player.Entity, blockSel.Position, bangle) == null) return;
 
             e.Handled = true;
 

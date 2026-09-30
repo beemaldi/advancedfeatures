@@ -54,11 +54,11 @@ namespace RuckSack
             harmony.CreateClassProcessor(typeof(RuckSackGroundStorageCollisionRotatePatch)).Patch();
             harmony.CreateClassProcessor(typeof(RuckSackGroundStorageInteractionHelpPatch)).Patch();
             harmony.CreateClassProcessor(typeof(RuckSackGroundStorageQuartzLightPatch)).Patch();
-            harmony.CreateClassProcessor(typeof(IgnitionBangleInteractionHelpPatch)).Patch();
             harmony.CreateClassProcessor(typeof(NoRepair_GetMergableQuantity_Patch)).Patch();
             harmony.CreateClassProcessor(typeof(NoRepair_TryMergeStacks_Patch)).Patch();
             RuckSackBackpackSlotLimitPatcher.Apply(harmony);
             RuckSackLunchboxPatcher.Apply(harmony);
+            IgnitionBangleInteractionHelpPatch.Apply(harmony, api);
 
             Input.InitClient(api);
             RuckSackQuartzLightSystem.InitClient(api);
@@ -89,6 +89,7 @@ namespace RuckSack
 
             RuckSackBackpackSlotLimitPatcher.Reset();
             RuckSackLunchboxPatcher.Reset();
+            IgnitionBangleInteractionHelpPatch.Reset();
 
             RuckSackQuartzLightSystem.Dispose();
 

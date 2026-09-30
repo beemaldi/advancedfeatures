@@ -69,9 +69,12 @@ namespace RuckSack
             return false;
         }
 
-        internal static IIgnitable? GetIgnitableTarget(IWorldAccessor world, EntityAgent byEntity, BlockPos pos)
+        internal static IIgnitable? GetIgnitableTarget(IWorldAccessor world, EntityAgent byEntity, BlockPos pos, CollectibleBehaviorIgnitionBangle bangle)
         {
-            IIgnitable? ignitable = world.BlockAccessor.GetBlock(pos).GetInterface<IIgnitable>(world, pos);
+            Block block = world.BlockAccessor.GetBlock(pos);
+            if (bangle.IsExcluded(block)) return null;
+
+            IIgnitable? ignitable = block.GetInterface<IIgnitable>(world, pos);
             if (ignitable == null) return null;
 
             EnumIgniteState state = ignitable.OnTryIgniteBlock(byEntity, pos, 0);
@@ -137,7 +140,7 @@ namespace RuckSack
             if (!IsInReach(player, entity, pos)) return false;
             if (!world.Claims.TryAccess(player, pos, EnumBlockAccessFlags.Use)) return false;
 
-            ignitable = GetIgnitableTarget(world, entity, pos);
+            ignitable = GetIgnitableTarget(world, entity, pos, bangle);
             return ignitable != null;
         }
 
