@@ -18,7 +18,7 @@ namespace RuckSack
                 sinkStack.Collectible.HasBehavior<NoRepairClothesBehavior>() &&
                 (sourceStack.ItemAttributes?["clothingRepairStrength"].AsFloat(0) ?? 0) > 0)
             {
-                handling = EnumHandling.PreventDefault;
+                handling = EnumHandling.PreventSubsequent;
                 __result = 0;
                 return false;
             }
@@ -36,7 +36,7 @@ namespace RuckSack
                 op.SinkSlot.Itemstack.Collectible.HasBehavior<NoRepairClothesBehavior>() &&
                 (op.SourceSlot.Itemstack.ItemAttributes?["clothingRepairStrength"].AsFloat(0) ?? 0) > 0)
             {
-                handling = EnumHandling.PreventDefault;
+                handling = EnumHandling.PreventSubsequent;
                 op.MovedQuantity = 0;
                 return false;
             }

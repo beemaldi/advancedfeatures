@@ -1,9 +1,15 @@
 ﻿{
 	"trait-smith": "<font color=\"#23FAF6\">• Smith </font>",
 	"traitname-smith": "Smith",
-	"traitdesc-smith": "Can craft and use <a href=\"handbooksearch://repair kit\">repair kits</a> to repair armor, a more efficient <a href=\"handbooksearch://brass torch holder\">torch holder</a> and the necessary <a href=\"handbooksearch://rucksack parts\">parts for a rucksack</a>.",
+	"traitdesc-smith": "Can craft and use <a href=\"handbooksearch://repair kit\">repair kits</a> to repair armor, a more efficient <a href=\"handbooksearch://brass torch holder\">torch holder</a>, the necessary <a href=\"handbooksearch://rucksack parts\">parts for a rucksack</a> and <a href=\"handbooksearch://blacksmith gloves\">blacksmith gloves</a>.",
 
 	"trait-backpacker": "<font color=\"#23FAF6\">• Backpacker </font>",
 	"traitname-backpacker": "Backpacker",
-	"traitdesc-backpacker": "<i>Countless journeys have taught you how to reinforce and expand your <a href=\"handbooksearch://bigger\">backpacks</a>, turning simple packs into sturdier and more spacious gear. As well as this highly customizable <a href=\"handbooksearch://rucksack\">rucksack</a></i>."
+	"traitdesc-backpacker": "<i>Countless journeys have taught you how to reinforce and expand your <a href=\"handbooksearch://bigger\">backpacks</a>, turning simple packs into sturdier and more spacious gear. As well as this highly customizable <a href=\"handbooksearch://rucksack\">rucksack</a></i>.",
+
+	"trait-prospector": "<font color=\"#84ff84\">• Prospector </font>",
+	"traitname-prospector": "Prospector",
+	"traitdesc-prospector": "Exclusive craftables <a href=\"handbooksearch://copper pan\">copper pan</a>, <a href=\"handbooksearch://mining lantern\">mining lantern</a> and the <a href=\"handbooksearch://resonant anchor\">resonant anchor</a>."
+
+
 }

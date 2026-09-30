@@ -17,7 +17,9 @@ namespace RuckSack
         {
             base.StartPre(api);
 
-            harmony ??= new Harmony("rucksack.arl.wearableattachment.bypass");
+            api.RegisterCollectibleBehaviorClass("NoRepairClothes", typeof(NoRepairClothesBehavior));
+
+            harmony ??=new Harmony("rucksack.arl.wearableattachment.bypass");
             harmony.CreateClassProcessor(typeof(ArlItemShapeTexturesFromAttributesOnLoadedPatch)).Patch();
         }
 
@@ -58,6 +60,7 @@ namespace RuckSack
             serverHarmony ??= new Harmony("rucksack.backpackslot.limit.server");
             serverHarmony.CreateClassProcessor(typeof(NoRepair_GetMergableQuantity_Patch)).Patch();
             serverHarmony.CreateClassProcessor(typeof(NoRepair_TryMergeStacks_Patch)).Patch();
+            serverHarmony.CreateClassProcessor(typeof(HeatResistantWearablePatch)).Patch();
             RuckSackBackpackSlotLimitPatcher.Apply(serverHarmony);
             RuckSackLunchboxPatcher.Apply(serverHarmony);
             RuckSackQuartzLightSystem.InitServer(api);
